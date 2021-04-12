@@ -2,10 +2,12 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 from tqdm.auto import tqdm, trange
+import openpyxl
+import xlrd
 
 
-data = pd.read_excel('kusp.xlsx')
-     
+data = pd.read_excel('kusp.xlsx', engine='openpyxl')
+
 #data.shape
 topics = ['Кража', 'Незаконные производство, сбыт или пересылка наркотических средств, психотропных веществ или их аналогов, а также незаконные сбыт или пересылка растений, содержащих наркотические средства или психотропные вещества, либо их частей, содержащих наркотические средства или психотропные вещества', 'Грабеж', 'Мошенничество', 'Вымогательство','Умышленное причинение средней тяжести вреда здоровью','Незаконные приобретение, передача, сбыт, хранение, перевозка или ношение оружия, его основных частей, боеприпасов','Умышленное причинение тяжкого вреда здоровью']
 df_res = pd.DataFrame()
@@ -13,9 +15,9 @@ df_res = pd.DataFrame()
 for topic in tqdm(topics):
     df_topic = data[data['topic'] == topic]
     df_res = df_res.append(df_topic, ignore_index=True)
-    
+
     #df_res.shape
-    
+
     import string
 def remove_punctuation(text):
     return "".join([ch if ch not in string.punctuation else ' ' for ch in text])
@@ -32,7 +34,7 @@ from nltk.stem import *
 from nltk.corpus import stopwords
 from pymystem3 import Mystem
 from string import punctuation
-mystem = Mystem() 
+mystem = Mystem()
 
 russian_stopwords = stopwords.words("russian")
 russian_stopwords.extend(['…', '«', '»', '...'])
@@ -49,7 +51,7 @@ len(prep_text)
 
 df_res['text_prep'] = prep_text
 
-from nltk.stem.snowball import SnowballStemmer 
+from nltk.stem.snowball import SnowballStemmer
 stemmer = SnowballStemmer("russian")
 
 russian_stopwords = stopwords.words("russian")
@@ -59,7 +61,7 @@ from nltk import word_tokenize
 
 stemmed_texts_list = []
 for text in tqdm(df_res['text_prep']):
-    tokens = word_tokenize(text)    
+    tokens = word_tokenize(text)
     stemmed_tokens = [stemmer.stem(token) for token in tokens if token not in russian_stopwords]
     text = " ".join(stemmed_tokens)
     stemmed_texts_list.append(text)
@@ -70,7 +72,7 @@ import nltk
 nltk.download('punkt')
 
 def remove_stop_words(text):
-    tokens = word_tokenize(text) 
+    tokens = word_tokenize(text)
     tokens = [token for token in tokens if token not in russian_stopwords and token != ' ']
     return " ".join(tokens)
 
@@ -78,7 +80,7 @@ from nltk import word_tokenize
 
 sw_texts_list = []
 for text in tqdm(df_res['text_prep']):
-    tokens = word_tokenize(text)    
+    tokens = word_tokenize(text)
     tokens = [token for token in tokens if token not in russian_stopwords and token != ' ']
     text = " ".join(tokens)
     sw_texts_list.append(text)
