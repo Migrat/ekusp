@@ -5,3 +5,4 @@ tqdm==4.50.2
 nltk==3.5
 snowballstemmer==2.0.0
 pymystem3==0.2.0
+xlrd==1.2.0
