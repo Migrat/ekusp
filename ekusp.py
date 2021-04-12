@@ -71,7 +71,7 @@ for text in tqdm(df_res['text_prep']):
 df_res['text_stem'] = stemmed_texts_list
 
 import nltk
-#nltk.download('punkt')
+
 
 def remove_stop_words(text):
     tokens = word_tokenize(text)
