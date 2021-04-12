@@ -5,6 +5,8 @@ from tqdm.auto import tqdm, trange
 import openpyxl
 import xlrd
 
+xlrd.xlsx.ensure_elementtree_imported(False, None)
+xlrd.xlsx.Element_has_iter = True
 
 data = pd.read_excel('kusp.xlsx', engine='openpyxl')
 
